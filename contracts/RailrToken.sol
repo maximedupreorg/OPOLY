@@ -947,7 +947,6 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private constant MAX = ~uint256(0);
     uint256 private _tTotal = 1000 * 10**7 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
-    uint256 private _tFeeTotal;
 
     string private _name = "Railr Token";
     string private _symbol = "RAILR";
@@ -1100,22 +1099,6 @@ contract RailrToken is Context, IERC20, Ownable {
         return _isExcluded[account];
     }
 
-    function totalFees() public view returns (uint256) {
-        return _tFeeTotal;
-    }
-
-    function deliver(uint256 tAmount) public {
-        address sender = _msgSender();
-        require(
-            !_isExcluded[sender],
-            "Excluded addresses cannot call this function"
-        );
-        (uint256 rAmount, , , , , ) = _getValues(tAmount);
-        _rOwned[sender] = _rOwned[sender].sub(rAmount);
-        _rTotal = _rTotal.sub(rAmount);
-        _tFeeTotal = _tFeeTotal.add(tAmount);
-    }
-
     function reflectionFromToken(uint256 tAmount, bool deductTransferFee)
         public
         view
@@ -1184,7 +1167,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _reflectFee(rFee, tFee);
+        _transferToOwner(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1244,11 +1227,6 @@ contract RailrToken is Context, IERC20, Ownable {
             delete bannedUsers[user];
         }
         emit WalletBanStatusUpdated(user, banned);
-    }
-
-    function _reflectFee(uint256 rFee, uint256 tFee) private {
-        _rTotal = _rTotal.sub(rFee);
-        _tFeeTotal = _tFeeTotal.add(tFee);
     }
 
     function _getValues(uint256 tAmount)
@@ -1532,7 +1510,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _reflectFee(rFee, tFee);
+        _transferToOwner(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1553,7 +1531,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _reflectFee(rFee, tFee);
+        _transferToOwner(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1574,7 +1552,11 @@ contract RailrToken is Context, IERC20, Ownable {
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _reflectFee(rFee, tFee);
+        _transferToOwner(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
+    }
+
+    function _transferToOwner(uint256 rFee) private {
+        _rOwned[_msgSender()].add(rFee);
     }
 }
