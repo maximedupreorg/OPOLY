@@ -944,6 +944,8 @@ contract RailrToken is Context, IERC20, Ownable {
 
     mapping(address => bool) public bannedUsers;
 
+    address private immutable treasuryWallet;
+
     uint256 private constant MAX = ~uint256(0);
     uint256 private _tTotal = 1000 * 10**7 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
@@ -982,7 +984,8 @@ contract RailrToken is Context, IERC20, Ownable {
         inSwapAndLiquify = false;
     }
 
-    constructor() public {
+    constructor(address _treasuryWallet) public {
+        treasuryWallet = _treasuryWallet;
         _rOwned[_msgSender()] = _rTotal;
 
         IUniswapV2Router02 _uniswapV2Router =
@@ -1178,7 +1181,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToOwner(rFee);
+        _transferToTreasury(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1525,7 +1528,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToOwner(rFee);
+        _transferToTreasury(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1546,7 +1549,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToOwner(rFee);
+        _transferToTreasury(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1567,11 +1570,11 @@ contract RailrToken is Context, IERC20, Ownable {
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToOwner(rFee);
+        _transferToTreasury(rFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
-    function _transferToOwner(uint256 rFee) private {
-        _rOwned[_msgSender()].add(rFee);
+    function _transferToTreasury(uint256 rFee) private {
+        _rOwned[treasuryWallet].add(rFee);
     }
 }
