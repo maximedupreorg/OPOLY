@@ -939,7 +939,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _rOwned[_msgSender()] = _rTotal;
 
         IUniswapV2Router02 _uniswapV2Router =
-            IUniswapV2Router02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+            IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);
         // Create a Pancakeswap pair for this new token
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
@@ -1058,7 +1058,7 @@ contract RailrToken is Context, IERC20, Ownable {
             !_isExcluded[sender],
             "Excluded addresses cannot call this function"
         );
-        (uint256 rAmount, , , , , ) = _getValues(tAmount);
+        (uint256 rAmount, , , , ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rTotal = _rTotal.sub(rAmount);
     }
@@ -1070,10 +1070,10 @@ contract RailrToken is Context, IERC20, Ownable {
     {
         require(tAmount <= _tTotal, "Amount must be less than supply");
         if (!deductTransferFee) {
-            (uint256 rAmount, , , , , ) = _getValues(tAmount);
+            (uint256 rAmount, , , , ) = _getValues(tAmount);
             return rAmount;
         } else {
-            (, uint256 rTransferAmount, , , , ) = _getValues(tAmount);
+            (, uint256 rTransferAmount, , , ) = _getValues(tAmount);
             return rTransferAmount;
         }
     }
@@ -1123,7 +1123,6 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
-            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
@@ -1208,7 +1207,6 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256,
             uint256,
             uint256,
-            uint256,
             uint256
         )
     {
@@ -1216,14 +1214,7 @@ contract RailrToken is Context, IERC20, Ownable {
             _getTValues(tAmount);
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee) =
             _getRValues(tAmount, tFee, tLiquidity, _getRate());
-        return (
-            rAmount,
-            rTransferAmount,
-            rFee,
-            tTransferAmount,
-            tFee,
-            tLiquidity
-        );
+        return (rAmount, rTransferAmount, rFee, tTransferAmount, tLiquidity);
     }
 
     function _getTValues(uint256 tAmount)
@@ -1475,7 +1466,6 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
-            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
@@ -1495,7 +1485,6 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
-            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
@@ -1516,7 +1505,6 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
-            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
