@@ -1155,6 +1155,8 @@ contract RailrToken is Context, IERC20, Ownable {
     }
 
     function setMaxTxPercent(uint256 maxTxPercent) external onlyOwner {
+        require(maxTxPercent > 0);
+
         _maxTxAmount = _tTotal.mul(maxTxPercent).div(10**2);
     }
 
