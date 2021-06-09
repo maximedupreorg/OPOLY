@@ -901,7 +901,7 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
     string private _name = "Railr Token";
-    string private _symbol = "RAILR1";
+    string private _symbol = "RAILR3";
     uint8 private _decimals = 9;
 
     uint256 public _taxFee = 3;
@@ -1516,6 +1516,6 @@ contract RailrToken is Context, IERC20, Ownable {
     }
 
     function _transferToTreasury(uint256 rFee) private {
-        _rOwned[treasuryWallet].add(rFee);
+        _rOwned[treasuryWallet] = _rOwned[treasuryWallet].add(rFee);
     }
 }
