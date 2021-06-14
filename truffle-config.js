@@ -21,6 +21,17 @@ module.exports = {
             skipDryRun: true,
             gas: 10000000,
         },
+        kovan: {
+            provider: () =>
+                new HDWalletProvider({
+                    mnemonic: process.env.MNEMONIC,
+                    providerOrUrl: `https://eth-kovan.alchemyapi.io/v2/${process.env.ARK_ALCHEMY_API_KEY_KOVAN}`,
+                    chainId: 42,
+                }),
+            network_id: 42,
+            skipDryRun: true,
+            gas: 10000000,
+        },
         testnet: {
             provider: () =>
                 new HDWalletProvider({
