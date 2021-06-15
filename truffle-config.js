@@ -10,7 +10,7 @@ module.exports = {
         etherscan: process.env.ETHERSCAN_API_KEY,
     },
     networks: {
-        rinkeby: {
+        ethRinkeby: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
@@ -21,7 +21,7 @@ module.exports = {
             skipDryRun: true,
             gas: 10000000,
         },
-        kovan: {
+        ethKovan: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
@@ -32,7 +32,7 @@ module.exports = {
             skipDryRun: true,
             gas: 10000000,
         },
-        testnet: {
+        bscTestnet: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
@@ -44,7 +44,7 @@ module.exports = {
             skipDryRun: true,
             gas: 30000000 / 4,
         },
-        bsc: {
+        bscMainnet: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
