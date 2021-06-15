@@ -14,7 +14,7 @@ module.exports = {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
-                    providerOrUrl: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ARK_ALCHEMY_API_KEY}`,
+                    providerOrUrl: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ARK_ALCHEMY_API_KEY_RINKEBY}`,
                     chainId: 4,
                 }),
             network_id: 4,
