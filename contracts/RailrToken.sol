@@ -901,13 +901,13 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
     string private _name = "Railr Token";
-    string private _symbol = "RAILR4";
+    string private _symbol = "RAILR5";
     uint8 private _decimals = 9;
 
-    uint256 public _taxFee = 3;
+    uint256 public _taxFee = 10;
     uint256 private _previousTaxFee = _taxFee;
 
-    uint256 public _liquidityFee = 3;
+    uint256 public _liquidityFee = 10;
     uint256 private _previousLiquidityFee = _liquidityFee;
 
     IUniswapV2Router02 public immutable uniswapV2Router;
@@ -916,7 +916,7 @@ contract RailrToken is Context, IERC20, Ownable {
     bool inSwapAndLiquify;
     bool public swapAndLiquifyEnabled = false; // Disable by default
 
-    uint256 public _maxTxAmount = 1000 * 10**3 * 10**9;
+    uint256 public _maxTxAmount = 1000 * 10**6 * 10**9;
     uint256 private numTokensSellToAddToLiquidity = 1250 * 10**3 * 10**9;
 
     event MinTokensBeforeSwapUpdated(uint256 minTokensBeforeSwap);
@@ -937,19 +937,34 @@ contract RailrToken is Context, IERC20, Ownable {
     constructor(address _treasuryWallet) public {
         treasuryWallet = _treasuryWallet;
         _rOwned[_msgSender()] = _rTotal;
-
         IUniswapV2Router02 _uniswapV2Router =
             IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);
-        // Create a Pancakeswap pair for this new token
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
-
-        // set the rest of the contract variables
         uniswapV2Router = _uniswapV2Router;
-
-        //exclude owner and this contract from fee
-        _isExcludedFromFee[owner()] = true;
+        // Exclude from fees
+        // contract
         _isExcludedFromFee[address(this)] = true;
+        // deployment
+        _isExcludedFromFee[owner()] = true;
+        // distribution
+        _isExcludedFromFee[0xE4257435C040e90500BbFD7bD91C219e4EBC716B] = true;
+        // treasury
+        _isExcludedFromFee[0xAE705BED6ed13FE943808ec35e0c09B0f213ca58] = true;
+        // team
+        _isExcludedFromFee[0xF42E538486879E061C17abefb7D4738dE645fD2e] = true;
+
+        // Exclude from rewards
+        // contract
+        excludeFromReward(address(this));
+        // deployment
+        excludeFromReward(owner());
+        // distribution
+        excludeFromReward(0xE4257435C040e90500BbFD7bD91C219e4EBC716B);
+        // treasury
+        excludeFromReward(0xAE705BED6ed13FE943808ec35e0c09B0f213ca58);
+        // team
+        excludeFromReward(0xF42E538486879E061C17abefb7D4738dE645fD2e);
 
         emit Transfer(address(0), _msgSender(), _tTotal);
     }
