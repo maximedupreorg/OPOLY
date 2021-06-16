@@ -10,27 +10,16 @@ module.exports = {
         etherscan: process.env.ETHERSCAN_API_KEY,
     },
     networks: {
-        ethRinkeby: {
+        bscMainnet: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
-                    providerOrUrl: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ARK_ALCHEMY_API_KEY_RINKEBY}`,
-                    chainId: 4,
+                    providerOrUrl: `https://bsc-dataseed1.binance.org`,
                 }),
-            network_id: 4,
+            network_id: 56,
+            confirmations: 10,
+            timeoutBlocks: 200,
             skipDryRun: true,
-            gas: 10000000,
-        },
-        ethKovan: {
-            provider: () =>
-                new HDWalletProvider({
-                    mnemonic: process.env.MNEMONIC,
-                    providerOrUrl: `https://eth-kovan.alchemyapi.io/v2/${process.env.ARK_ALCHEMY_API_KEY_KOVAN}`,
-                    chainId: 42,
-                }),
-            network_id: 42,
-            skipDryRun: true,
-            gas: 10000000,
         },
         bscTestnet: {
             provider: () =>
@@ -44,21 +33,42 @@ module.exports = {
             skipDryRun: true,
             gas: 30000000 / 4,
         },
-        bscMainnet: {
+        ethKovan: {
             provider: () =>
                 new HDWalletProvider({
                     mnemonic: process.env.MNEMONIC,
-                    providerOrUrl: `https://bsc-dataseed1.binance.org`,
+                    providerOrUrl: `https://eth-kovan.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_KOVAN}`,
+                    chainId: 42,
                 }),
-            network_id: 56,
-            confirmations: 10,
-            timeoutBlocks: 200,
+            network_id: 42,
             skipDryRun: true,
+            gas: 10000000,
+        },
+        ethRinkeby: {
+            provider: () =>
+                new HDWalletProvider({
+                    mnemonic: process.env.MNEMONIC,
+                    providerOrUrl: `https://eth-rinkeby.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY_RINKEBY}`,
+                    chainId: 4,
+                }),
+            network_id: 4,
+            skipDryRun: true,
+            gas: 10000000,
+        },
+        test: {
+            host: "127.0.0.1",
+            port: 8545,
+            network_id: "*",
         },
     },
     compilers: {
         solc: {
             version: "0.6.12",
+            settings: {
+                optimizer: {
+                    enabled: true,
+                },
+            },
         },
     },
 };
