@@ -9,7 +9,7 @@
         "truffle-plugin-verify": "^0.5.8"
     },
     "scripts": {
-        "start:rinkebyFork": "dotenv -- bash -c 'ganache-cli -f https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY_RINKEBY} --allowUnlimitedContractSize'",
+        "start:rinkebyFork": "dotenv -- bash -c 'ganache-cli -f https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY_RINKEBY}'",
         "test": "truffle test"
     }
 }
