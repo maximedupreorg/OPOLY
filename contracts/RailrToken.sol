@@ -953,6 +953,8 @@ contract RailrToken is Context, IERC20, Ownable {
         _isExcludedFromFee[0xAE705BED6ed13FE943808ec35e0c09B0f213ca58] = true;
         // team
         _isExcludedFromFee[0xF42E538486879E061C17abefb7D4738dE645fD2e] = true;
+        // unicrypt
+        _isExcludedFromFee[0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf] = true;
 
         // Exclude from rewards
         // contract
@@ -965,6 +967,8 @@ contract RailrToken is Context, IERC20, Ownable {
         excludeFromReward(0xAE705BED6ed13FE943808ec35e0c09B0f213ca58);
         // team
         excludeFromReward(0xF42E538486879E061C17abefb7D4738dE645fD2e);
+        // unicrypt
+        excludeFromReward(0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf);
 
         emit Transfer(address(0), _msgSender(), _tTotal);
     }
