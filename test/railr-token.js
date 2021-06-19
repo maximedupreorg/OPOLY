@@ -204,4 +204,32 @@ contract("RailrToken", (accounts) => {
 
         assert.equal(failed, true);
     });
+
+    it("should not be able to set a tax fee greater than 10", async () => {
+        let failed = false;
+
+        const instance = await RailrToken.deployed();
+
+        try {
+            await instance.setTaxFeePercent(11);
+        } catch (e) {
+            failed = true;
+        }
+
+        assert.equal(failed, true);
+    });
+
+    it("should not be able to set a liquidity fee greater than 10", async () => {
+        let failed = false;
+
+        const instance = await RailrToken.deployed();
+
+        try {
+            await instance.setLiquidityFeePercent(11);
+        } catch (e) {
+            failed = true;
+        }
+
+        assert.equal(failed, true);
+    });
 });
