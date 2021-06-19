@@ -93,6 +93,16 @@ contract("RailrToken", (accounts) => {
         assert.equal(isExcludedFromFee, true);
     });
 
+    it("should exclude ETH unicrypt address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(
+            "0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf",
+        );
+
+        assert.equal(isExcludedFromFee, true);
+    });
+
     it("should exclude the contract address from rewards by default", async () => {
         const instance = await RailrToken.deployed();
 
@@ -138,6 +148,16 @@ contract("RailrToken", (accounts) => {
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
             process.env.TEAM_WALLET,
+        );
+
+        assert.equal(isExcludedFromReward, true);
+    });
+
+    it("should exclude ETH unicrypt address from rewards by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromReward = await instance.isExcludedFromReward(
+            "0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf",
         );
 
         assert.equal(isExcludedFromReward, true);
