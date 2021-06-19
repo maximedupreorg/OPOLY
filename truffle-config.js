@@ -1,7 +1,6 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const dotenv = require("dotenv");
 
-dotenv.config();
+const DEFAULT_GAS_PRICE = 20000000000;
 
 module.exports = {
     plugins: ["truffle-plugin-verify"],
@@ -53,7 +52,7 @@ module.exports = {
                 }),
             network_id: 4,
             skipDryRun: true,
-            gas: 10000000,
+            gasPrice: DEFAULT_GAS_PRICE * 2,
         },
         test: {
             host: "127.0.0.1",

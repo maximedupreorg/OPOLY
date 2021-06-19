@@ -9,7 +9,9 @@
         "truffle-plugin-verify": "^0.5.8"
     },
     "scripts": {
+        "deploy:rinkeby": "dotenv -- truffle deploy --network ethRinkeby",
         "start:rinkebyFork": "dotenv -- bash -c 'ganache-cli -f https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY_RINKEBY}'",
-        "test": "dotenv truffle test"
+        "test": "dotenv truffle test",
+        "verify:rinkeby": "dotenv -- truffle run verify RailrToken --network ethRinkeby"
     }
 }
