@@ -234,13 +234,48 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should transfer the fees to the treasury wallet on transfers between 2 holders", async () => {
-        // const instance = await RailrToken.deployed();
-        // const fiveBillion = "5000000000000000000";
-        // await instance.transfer(accounts[1], fiveBillion);
-        // const secondAccountBalance = await instance.balanceOf(accounts[1]);
-        // // this contains the right value 5B, next transfer 2.5B from account 2 to account 3 and test that treasurey has 250M in it and test that account 3 has 2.25B
-        // console.log(secondAccountBalance.toString());
+        const instance = await RailrToken.deployed();
+
+        const oneBillion = "1000000000000000000";
+        const fiveHundredMillions = "500000000000000000";
+
+        await instance.transfer(accounts[1], oneBillion);
+
+        await instance.transfer(accounts[2], fiveHundredMillions, {
+            from: accounts[1],
+        });
+
+        const secondAccountBalance = await instance.balanceOf(accounts[1]);
+
+        const thirdAccountBalance = await instance.balanceOf(accounts[2]);
+
+        const treasuryAccountBalance = await instance.balanceOf(
+            process.env.TREASURY_WALLET,
+        );
+
+        const nineBillions = "9000000000000000000";
+        const fourHundredFiftyMillions = "450000000000000000";
+        const fiftyMillions = "50000000000000000";
+
+        expect(
+            secondAccountBalance.toString(),
+            nineBillions,
+            "second account balance",
+        );
+
+        expect(
+            thirdAccountBalance.toString(),
+            fourHundredFiftyMillions,
+            "third account balance",
+        );
+
+        expect(
+            treasuryAccountBalance.toString(),
+            fiftyMillions,
+            "treasury account balance",
+        );
     });
+
     it("should be able to do a reflective airdrop to all non excluded wallets");
     it(
         "should not have a non reflective fee on transfers (transfers should not affect non-participants)",
