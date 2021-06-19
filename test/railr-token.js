@@ -44,4 +44,52 @@ contract("RailrToken", (accounts) => {
 
         assert.equal(taxFee.toString(), "10", "tax fee");
     });
+
+    it("should exclude the contract address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(
+            instance.address,
+        );
+
+        assert.equal(isExcludedFromFee, true);
+    });
+
+    it("should exclude the owner (deployment) address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(accounts[0]);
+
+        assert.equal(isExcludedFromFee, true);
+    });
+
+    it("should exclude the treasury address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(
+            process.env.TREASURY_WALLET,
+        );
+
+        assert.equal(isExcludedFromFee, true);
+    });
+
+    it("should exclude the distribution address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(
+            process.env.DISTRIBUTION_WALLET,
+        );
+
+        assert.equal(isExcludedFromFee, true);
+    });
+
+    it("should exclude the team address from fee by default", async () => {
+        const instance = await RailrToken.deployed();
+
+        const isExcludedFromFee = await instance.isExcludedFromFee(
+            process.env.TEAM_WALLET,
+        );
+
+        assert.equal(isExcludedFromFee, true);
+    });
 });

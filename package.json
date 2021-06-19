@@ -10,6 +10,6 @@
     },
     "scripts": {
         "start:rinkebyFork": "dotenv -- bash -c 'ganache-cli -f https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY_RINKEBY}'",
-        "test": "truffle test"
+        "test": "dotenv truffle test"
     }
 }
