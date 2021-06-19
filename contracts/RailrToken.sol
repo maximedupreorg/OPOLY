@@ -900,7 +900,7 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _tTotal = 1000 * 10**7 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
-    string private _name = "Railr Token";
+    string private _name = "Railroad Token";
     string private _symbol = "RAILR5";
     uint8 private _decimals = 9;
 
