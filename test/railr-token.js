@@ -190,4 +190,18 @@ contract("RailrToken", (accounts) => {
 
         assert.equal(failed, true);
     });
+
+    it("should not be able to set a max transaction percentage to -1", async () => {
+        let failed = false;
+
+        const instance = await RailrToken.deployed();
+
+        try {
+            await instance.setMaxTxPercent(-1);
+        } catch (e) {
+            failed = true;
+        }
+
+        assert.equal(failed, true);
+    });
 });
