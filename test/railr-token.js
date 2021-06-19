@@ -28,4 +28,20 @@ contract("RailrToken", (accounts) => {
             "total supply",
         );
     });
+
+    it("should have an initial 10% liquidity fee", async () => {
+        const instance = await RailrToken.deployed();
+
+        const liquidityFee = await instance._liquidityFee();
+
+        assert.equal(liquidityFee.toString(), "10", "liquidity fee");
+    });
+
+    it("should have an initial 10% tax fee", async () => {
+        const instance = await RailrToken.deployed();
+
+        const taxFee = await instance._taxFee();
+
+        assert.equal(taxFee.toString(), "10", "tax fee");
+    });
 });
