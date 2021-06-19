@@ -232,4 +232,12 @@ contract("RailrToken", (accounts) => {
 
         assert.equal(failed, true);
     });
+
+    it(
+        "should transfer the fees to the treasury wallet on transfers between 2 holders",
+    );
+    it("should be able to do a reflective airdrop to all non excluded wallets");
+    it(
+        "should not have a non reflective fee on transfers (transfers should not affect non-participants)",
+    );
 });
