@@ -233,9 +233,14 @@ contract("RailrToken", (accounts) => {
         assert.equal(failed, true);
     });
 
-    it(
-        "should transfer the fees to the treasury wallet on transfers between 2 holders",
-    );
+    it("should transfer the fees to the treasury wallet on transfers between 2 holders", async () => {
+        // const instance = await RailrToken.deployed();
+        // const fiveBillion = "5000000000000000000";
+        // await instance.transfer(accounts[1], fiveBillion);
+        // const secondAccountBalance = await instance.balanceOf(accounts[1]);
+        // // this contains the right value 5B, next transfer 2.5B from account 2 to account 3 and test that treasurey has 250M in it and test that account 3 has 2.25B
+        // console.log(secondAccountBalance.toString());
+    });
     it("should be able to do a reflective airdrop to all non excluded wallets");
     it(
         "should not have a non reflective fee on transfers (transfers should not affect non-participants)",
