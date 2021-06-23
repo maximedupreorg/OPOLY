@@ -245,6 +245,8 @@ contract("RailrToken", (accounts) => {
             from: accounts[1],
         });
 
+        const firstAccountBalance = await instance.balanceOf(accounts[0]);
+
         const secondAccountBalance = await instance.balanceOf(accounts[1]);
 
         const thirdAccountBalance = await instance.balanceOf(accounts[2]);
@@ -257,19 +259,25 @@ contract("RailrToken", (accounts) => {
         const fourHundredFiftyMillions = "450000000000000000";
         const fiftyMillions = "50000000000000000";
 
-        expect(
-            secondAccountBalance.toString(),
+        assert.equal(
+            firstAccountBalance.toString(),
             nineBillions,
+            "first account balance",
+        );
+
+        assert.equal(
+            secondAccountBalance.toString(),
+            fiveHundredMillions,
             "second account balance",
         );
 
-        expect(
+        assert.equal(
             thirdAccountBalance.toString(),
             fourHundredFiftyMillions,
             "third account balance",
         );
 
-        expect(
+        assert.equal(
             treasuryAccountBalance.toString(),
             fiftyMillions,
             "treasury account balance",
