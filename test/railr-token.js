@@ -191,20 +191,6 @@ contract("RailrToken", (accounts) => {
         assert.equal(failed, true);
     });
 
-    it("should not be able to set a max transaction percentage to -1", async () => {
-        let failed = false;
-
-        const instance = await RailrToken.deployed();
-
-        try {
-            await instance.setMaxTxPercent(-1);
-        } catch (e) {
-            failed = true;
-        }
-
-        assert.equal(failed, true);
-    });
-
     it("should not be able to set a tax fee greater than 10", async () => {
         let failed = false;
 
@@ -256,7 +242,7 @@ contract("RailrToken", (accounts) => {
         );
 
         const nineBillions = "9000000000000000000";
-        const fourHundredFiftyMillions = "450000000000000000";
+        const fourHundredMillions = "400000000000000000";
         const fiftyMillions = "50000000000000000";
 
         assert.equal(
@@ -273,7 +259,7 @@ contract("RailrToken", (accounts) => {
 
         assert.equal(
             thirdAccountBalance.toString(),
-            fourHundredFiftyMillions,
+            fourHundredMillions,
             "third account balance",
         );
 

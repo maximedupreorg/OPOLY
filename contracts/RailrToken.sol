@@ -1081,7 +1081,7 @@ contract RailrToken is Context, IERC20, Ownable {
             !_isExcluded[sender],
             "Excluded addresses cannot call this function"
         );
-        (uint256 rAmount, , , , ) = _getValues(tAmount);
+        (uint256 rAmount, , , , , ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rTotal = _rTotal.sub(rAmount);
     }
@@ -1093,10 +1093,10 @@ contract RailrToken is Context, IERC20, Ownable {
     {
         require(tAmount <= _tTotal, "Amount must be less than supply");
         if (!deductTransferFee) {
-            (uint256 rAmount, , , , ) = _getValues(tAmount);
+            (uint256 rAmount, , , , , ) = _getValues(tAmount);
             return rAmount;
         } else {
-            (, uint256 rTransferAmount, , , ) = _getValues(tAmount);
+            (, uint256 rTransferAmount, , , , ) = _getValues(tAmount);
             return rTransferAmount;
         }
     }
@@ -1146,6 +1146,7 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
+            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
@@ -1153,7 +1154,7 @@ contract RailrToken is Context, IERC20, Ownable {
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToTreasury(rFee);
+        _transferToTreasury(rFee, tFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1232,6 +1233,7 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256,
             uint256,
             uint256,
+            uint256,
             uint256
         )
     {
@@ -1239,7 +1241,14 @@ contract RailrToken is Context, IERC20, Ownable {
             _getTValues(tAmount);
         (uint256 rAmount, uint256 rTransferAmount, uint256 rFee) =
             _getRValues(tAmount, tFee, tLiquidity, _getRate());
-        return (rAmount, rTransferAmount, rFee, tTransferAmount, tLiquidity);
+        return (
+            rAmount,
+            rTransferAmount,
+            rFee,
+            tTransferAmount,
+            tFee,
+            tLiquidity
+        );
     }
 
     function _getTValues(uint256 tAmount)
@@ -1491,12 +1500,13 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
+            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToTreasury(rFee);
+        _transferToTreasury(rFee, tFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1510,13 +1520,14 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
+            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _tOwned[recipient] = _tOwned[recipient].add(tTransferAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToTreasury(rFee);
+        _transferToTreasury(rFee, tFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
@@ -1530,17 +1541,19 @@ contract RailrToken is Context, IERC20, Ownable {
             uint256 rTransferAmount,
             uint256 rFee,
             uint256 tTransferAmount,
+            uint256 tFee,
             uint256 tLiquidity
         ) = _getValues(tAmount);
         _tOwned[sender] = _tOwned[sender].sub(tAmount);
         _rOwned[sender] = _rOwned[sender].sub(rAmount);
         _rOwned[recipient] = _rOwned[recipient].add(rTransferAmount);
         _takeLiquidity(tLiquidity);
-        _transferToTreasury(rFee);
+        _transferToTreasury(rFee, tFee);
         emit Transfer(sender, recipient, tTransferAmount);
     }
 
-    function _transferToTreasury(uint256 rFee) private {
+    function _transferToTreasury(uint256 rFee, uint256 tFee) private {
         _rOwned[treasuryWallet] = _rOwned[treasuryWallet].add(rFee);
+        _tOwned[treasuryWallet] = _tOwned[treasuryWallet].add(tFee);
     }
 }
