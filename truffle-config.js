@@ -52,7 +52,6 @@ module.exports = {
                 }),
             network_id: 4,
             skipDryRun: true,
-            gasPrice: DEFAULT_GAS_PRICE * 2,
         },
         test: {
             host: "127.0.0.1",
