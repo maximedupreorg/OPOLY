@@ -222,14 +222,15 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should transfer the fees to the treasury wallet on transfers between 2 holders", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await RailrToken.new(
+            process.env.TREASURY_WALLET,
+            process.env.DISTRIBUTION_WALLET,
+            process.env.TEAM_WALLET,
+        );
 
-        const oneBillion = "1000000000000000000";
-        const fiveHundredMillions = "500000000000000000";
+        await instance.transfer(accounts[1], getTokenAmount("1000000000"));
 
-        await instance.transfer(accounts[1], oneBillion);
-
-        await instance.transfer(accounts[2], fiveHundredMillions, {
+        await instance.transfer(accounts[2], getTokenAmount("500000000"), {
             from: accounts[1],
         });
 
@@ -243,42 +244,41 @@ contract("RailrToken", (accounts) => {
             process.env.TREASURY_WALLET,
         );
 
-        const nineBillions = "9000000000000000000";
-        const fourHundredMillions = "400000000000000000";
-        const fiftyMillions = "50000000000000000";
-
         assert.equal(
             firstAccountBalance.toString(),
-            nineBillions,
+            getTokenAmount("9000000000"),
             "first account balance",
         );
 
         assert.equal(
             secondAccountBalance.toString(),
-            fiveHundredMillions,
+            getTokenAmount("500000000"),
             "second account balance",
         );
 
         assert.equal(
             thirdAccountBalance.toString(),
-            fourHundredMillions,
+            getTokenAmount("400000000"),
             "third account balance",
         );
 
         assert.equal(
             treasuryAccountBalance.toString(),
-            fiftyMillions,
+            getTokenAmount("50000000"),
             "treasury account balance",
         );
     });
 
     it("should not tax adding liquidity to the pool when LP is excluded from fees", async () => {
-        const DECIMALS = 10 ** 9;
-        const TOKENS_TO_ADD_TO_LIQ = (1000000 * DECIMALS).toString();
+        const TOKENS_TO_ADD_TO_LIQ = getTokenAmount(1000000);
         const WEI_TO_ADD_TO_LIQ = web3.utils.toWei("1");
         const LP_ACCOUNT = accounts[0];
 
-        const instance = await RailrToken.deployed();
+        const instance = await RailrToken.new(
+            process.env.TREASURY_WALLET,
+            process.env.DISTRIBUTION_WALLET,
+            process.env.TEAM_WALLET,
+        );
 
         const routerInstance = await IUniswapV2Router02.at(
             await instance.uniswapV2Router(),
@@ -351,5 +351,51 @@ contract("RailrToken", (accounts) => {
         }
     });
 
-    it("should be able to do a reflective airdrop to all non excluded wallets");
+    it("should be able to do a reflective airdrop to all non excluded wallets", async () => {
+        const instance = await RailrToken.new(
+            process.env.TREASURY_WALLET,
+            process.env.DISTRIBUTION_WALLET,
+            process.env.TEAM_WALLET,
+        );
+
+        await instance.transfer(accounts[1], getTokenAmount(4000000000));
+
+        await instance.transfer(accounts[2], getTokenAmount(3000000000));
+
+        await instance.transfer(accounts[3], getTokenAmount(1000000000));
+
+        await instance.deliver(getTokenAmount(4000000000), {
+            from: accounts[1],
+        });
+
+        assert.equal(
+            (await instance.balanceOf(accounts[0])).toString(),
+            getTokenAmount(2000000000),
+            "first account balance",
+        );
+
+        assert.equal(
+            (await instance.balanceOf(accounts[1])).toString(),
+            getTokenAmount(0),
+            "second account balance",
+        );
+
+        assert.equal(
+            (await instance.balanceOf(accounts[2])).toString(),
+            getTokenAmount(6000000000),
+            "third account balance",
+        );
+
+        assert.equal(
+            (await instance.balanceOf(accounts[3])).toString(),
+            getTokenAmount(2000000000),
+            "fourth account balance",
+        );
+    });
 });
+
+function getTokenAmount(number) {
+    const DECIMALS = 10 ** 9;
+
+    return (number * DECIMALS).toString();
+}
