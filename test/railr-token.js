@@ -307,15 +307,15 @@ contract("RailrToken", (accounts) => {
         const reserves = await pairInstance.getReserves();
 
         if ((await pairInstance.token0()) === instance.address) {
-            console.log(
-                "Pair reserve of token0/RAILR",
-                reserves.reserve0.toString(),
-            );
-            console.log(
-                "Pair reserve of token1/WETH",
-                reserves.reserve1.toString(),
-                web3.utils.fromWei(reserves.reserve1.toString()),
-            );
+            // console.log(
+            //     "Pair reserve of token0/RAILR",
+            //     reserves.reserve0.toString(),
+            // );
+            // console.log(
+            //     "Pair reserve of token1/WETH",
+            //     reserves.reserve1.toString(),
+            //     web3.utils.fromWei(reserves.reserve1.toString()),
+            // );
 
             assert.equal(
                 reserves.reserve0.toString(),
@@ -328,15 +328,15 @@ contract("RailrToken", (accounts) => {
                 "eth reserve",
             );
         } else {
-            console.log(
-                "Pair reserve of token1/RAILR",
-                reserves.reserve1.toString(),
-            );
-            console.log(
-                "Pair reserve of token0/WETH",
-                reserves.reserve0.toString(),
-                web3.utils.fromWei(reserves.reserve0.toString()),
-            );
+            // console.log(
+            //     "Pair reserve of token1/RAILR",
+            //     reserves.reserve1.toString(),
+            // );
+            // console.log(
+            //     "Pair reserve of token0/WETH",
+            //     reserves.reserve0.toString(),
+            //     web3.utils.fromWei(reserves.reserve0.toString()),
+            // );
 
             assert.equal(
                 reserves.reserve1.toString(),
