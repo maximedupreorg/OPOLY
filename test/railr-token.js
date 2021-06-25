@@ -1,4 +1,6 @@
 const RailrToken = artifacts.require("RailrToken");
+const IUniswapV2Router02 = artifacts.require("IUniswapV2Router02");
+const IUniswapV2Pair = artifacts.require("IUniswapV2Pair");
 
 contract("RailrToken", (accounts) => {
     it("should have the symbol RAILR", async () => {
@@ -270,8 +272,84 @@ contract("RailrToken", (accounts) => {
         );
     });
 
+    it("should not tax adding liquidity to the pool when LP is excluded from fees", async () => {
+        const DECIMALS = 10 ** 9;
+        const TOKENS_TO_ADD_TO_LIQ = (1000000 * DECIMALS).toString();
+        const WEI_TO_ADD_TO_LIQ = web3.utils.toWei("1");
+        const LP_ACCOUNT = accounts[0];
+
+        const instance = await RailrToken.deployed();
+
+        const routerInstance = await IUniswapV2Router02.at(
+            await instance.uniswapV2Router(),
+        );
+
+        const pairInstance = await IUniswapV2Pair.at(
+            await instance.uniswapV2Pair(),
+        );
+
+        await instance.transfer(LP_ACCOUNT, TOKENS_TO_ADD_TO_LIQ);
+
+        await instance.approve(routerInstance.address, TOKENS_TO_ADD_TO_LIQ, {
+            from: LP_ACCOUNT,
+        });
+
+        await routerInstance.addLiquidityETH(
+            instance.address,
+            TOKENS_TO_ADD_TO_LIQ,
+            TOKENS_TO_ADD_TO_LIQ,
+            WEI_TO_ADD_TO_LIQ,
+            LP_ACCOUNT,
+            Date.now() + 1000 * 60 * 10,
+            { from: LP_ACCOUNT, value: WEI_TO_ADD_TO_LIQ },
+        );
+
+        const reserves = await pairInstance.getReserves();
+
+        if ((await pairInstance.token0()) === instance.address) {
+            console.log(
+                "Pair reserve of token0/RAILR",
+                reserves.reserve0.toString(),
+            );
+            console.log(
+                "Pair reserve of token1/WETH",
+                reserves.reserve1.toString(),
+                web3.utils.fromWei(reserves.reserve1.toString()),
+            );
+
+            assert.equal(
+                reserves.reserve0.toString(),
+                TOKENS_TO_ADD_TO_LIQ,
+                "tokens reserve",
+            );
+            assert.equal(
+                reserves.reserve1.toString(),
+                WEI_TO_ADD_TO_LIQ,
+                "eth reserve",
+            );
+        } else {
+            console.log(
+                "Pair reserve of token1/RAILR",
+                reserves.reserve1.toString(),
+            );
+            console.log(
+                "Pair reserve of token0/WETH",
+                reserves.reserve0.toString(),
+                web3.utils.fromWei(reserves.reserve0.toString()),
+            );
+
+            assert.equal(
+                reserves.reserve1.toString(),
+                TOKENS_TO_ADD_TO_LIQ,
+                "tokens reserve",
+            );
+            assert.equal(
+                reserves.reserve0.toString(),
+                WEI_TO_ADD_TO_LIQ,
+                "eth reserve",
+            );
+        }
+    });
+
     it("should be able to do a reflective airdrop to all non excluded wallets");
-    it(
-        "should not have a non reflective fee on transfers (transfers should not affect non-participants)",
-    );
 });
