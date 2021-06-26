@@ -1,6 +1,7 @@
 const Web3 = require("web3");
 const fetch = require("node-fetch");
 const dotenv = require("dotenv");
+const { createObjectCsvWriter } = require("csv-writer");
 
 dotenv.config();
 
@@ -37,11 +38,25 @@ const web3 = new Web3(
         a.toLowerCase(),
     );
     const uniqAddresses = [...new Set(allAddresses)];
-    const balances = {};
+
+    const csvWriter = createObjectCsvWriter({
+        path: "data.csv",
+        header: [
+            { id: "holderAddress", title: "HolderAddress" },
+            { id: "balance", title: "Balance" },
+            { id: "pendingBalanceUpdate", title: "PendingBalanceUpdate" },
+        ],
+    });
+
+    const records = [];
 
     for (let a of uniqAddresses) {
-        balances[a] = await contract.methods.balanceOf(a).call();
+        records.push({
+            holderAddress: a,
+            balance: (await contract.methods.balanceOf(a).call()) / 10 ** 9,
+            pendingBalanceUpdate: "No",
+        });
     }
 
-    console.log(balances);
+    await csvWriter.writeRecords(records); // returns a promise
 })();
