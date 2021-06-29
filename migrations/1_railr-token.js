@@ -3,8 +3,9 @@ const RailrToken = artifacts.require("RailrToken");
 module.exports = function (deployer) {
     deployer.deploy(
         RailrToken,
-        process.env.TREASURY_WALLET,
-        process.env.DISTRIBUTION_WALLET,
-        process.env.TEAM_WALLET,
+        process.env.ROUTER_ADDRESS,
+        process.env.TREASURY_ADDRESS,
+        process.env.DISTRIBUTION_ADDRESS,
+        process.env.TEAM_ADDRESS,
     );
 };

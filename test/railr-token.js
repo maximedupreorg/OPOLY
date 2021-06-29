@@ -8,7 +8,7 @@ contract("RailrToken", (accounts) => {
 
         const symbol = await instance.symbol();
 
-        assert.equal(symbol, "RAILR5", "token symbol");
+        assert.equal(symbol, "RAILR6", "token symbol");
     });
 
     it("should have the Railroad Token name", async () => {
@@ -69,7 +69,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
-            process.env.TREASURY_WALLET,
+            process.env.TREASURY_ADDRESS,
         );
 
         assert.equal(isExcludedFromFee, true);
@@ -79,7 +79,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
-            process.env.DISTRIBUTION_WALLET,
+            process.env.DISTRIBUTION_ADDRESS,
         );
 
         assert.equal(isExcludedFromFee, true);
@@ -89,7 +89,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
-            process.env.TEAM_WALLET,
+            process.env.TEAM_ADDRESS,
         );
 
         assert.equal(isExcludedFromFee, true);
@@ -129,7 +129,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
-            process.env.TREASURY_WALLET,
+            process.env.TREASURY_ADDRESS,
         );
 
         assert.equal(isExcludedFromReward, true);
@@ -139,7 +139,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
-            process.env.DISTRIBUTION_WALLET,
+            process.env.DISTRIBUTION_ADDRESS,
         );
 
         assert.equal(isExcludedFromReward, true);
@@ -149,7 +149,7 @@ contract("RailrToken", (accounts) => {
         const instance = await RailrToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
-            process.env.TEAM_WALLET,
+            process.env.TEAM_ADDRESS,
         );
 
         assert.equal(isExcludedFromReward, true);
@@ -223,9 +223,10 @@ contract("RailrToken", (accounts) => {
 
     it("should transfer the fees to the treasury wallet on transfers between 2 holders", async () => {
         const instance = await RailrToken.new(
-            process.env.TREASURY_WALLET,
-            process.env.DISTRIBUTION_WALLET,
-            process.env.TEAM_WALLET,
+            process.env.ROUTER_ADDRESS,
+            process.env.TREASURY_ADDRESS,
+            process.env.DISTRIBUTION_ADDRESS,
+            process.env.TEAM_ADDRESS,
         );
 
         await instance.transfer(accounts[1], getTokenAmount("1000000000"));
@@ -241,7 +242,7 @@ contract("RailrToken", (accounts) => {
         const thirdAccountBalance = await instance.balanceOf(accounts[2]);
 
         const treasuryAccountBalance = await instance.balanceOf(
-            process.env.TREASURY_WALLET,
+            process.env.TREASURY_ADDRESS,
         );
 
         assert.equal(
@@ -275,9 +276,10 @@ contract("RailrToken", (accounts) => {
         const LP_ACCOUNT = accounts[0];
 
         const instance = await RailrToken.new(
-            process.env.TREASURY_WALLET,
-            process.env.DISTRIBUTION_WALLET,
-            process.env.TEAM_WALLET,
+            process.env.ROUTER_ADDRESS,
+            process.env.TREASURY_ADDRESS,
+            process.env.DISTRIBUTION_ADDRESS,
+            process.env.TEAM_ADDRESS,
         );
 
         const routerInstance = await IUniswapV2Router02.at(
@@ -353,9 +355,10 @@ contract("RailrToken", (accounts) => {
 
     it("should be able to do a reflective airdrop to all non excluded wallets", async () => {
         const instance = await RailrToken.new(
-            process.env.TREASURY_WALLET,
-            process.env.DISTRIBUTION_WALLET,
-            process.env.TEAM_WALLET,
+            process.env.ROUTER_ADDRESS,
+            process.env.TREASURY_ADDRESS,
+            process.env.DISTRIBUTION_ADDRESS,
+            process.env.TEAM_ADDRESS,
         );
 
         await instance.transfer(accounts[1], getTokenAmount(4000000000));

@@ -894,7 +894,7 @@ contract RailrToken is Context, IERC20, Ownable {
 
     mapping(address => bool) public bannedUsers;
 
-    address private immutable treasuryWallet;
+    address private immutable treasuryAddress;
 
     uint256 private constant MAX = ~uint256(0);
     uint256 private _tTotal = 1000 * 10**7 * 10**9;
@@ -935,28 +935,29 @@ contract RailrToken is Context, IERC20, Ownable {
     }
 
     constructor(
-        address _treasuryWallet,
-        address _distributionWallet,
-        address _teamWallet
+        address _routerAddress,
+        address _treasuryAddress,
+        address _distributionAddress,
+        address _teamAddress
     ) public {
-        treasuryWallet = _treasuryWallet;
         _rOwned[_msgSender()] = _rTotal;
         IUniswapV2Router02 _uniswapV2Router =
-            IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);
+            IUniswapV2Router02(_routerAddress);
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
         uniswapV2Router = _uniswapV2Router;
+        treasuryAddress = _treasuryAddress;
         // Exclude from fees
         // contract
         _isExcludedFromFee[address(this)] = true;
         // deployment
         _isExcludedFromFee[owner()] = true;
         // treasury
-        _isExcludedFromFee[_treasuryWallet] = true;
+        _isExcludedFromFee[_treasuryAddress] = true;
         // distribution
-        _isExcludedFromFee[_distributionWallet] = true;
+        _isExcludedFromFee[_distributionAddress] = true;
         // team
-        _isExcludedFromFee[_teamWallet] = true;
+        _isExcludedFromFee[_teamAddress] = true;
         // unicrypt
         _isExcludedFromFee[0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf] = true;
 
@@ -966,11 +967,11 @@ contract RailrToken is Context, IERC20, Ownable {
         // deployment
         excludeFromReward(owner());
         // treasury
-        excludeFromReward(_treasuryWallet);
+        excludeFromReward(_treasuryAddress);
         // distribution
-        excludeFromReward(_distributionWallet);
+        excludeFromReward(_distributionAddress);
         // team
-        excludeFromReward(_teamWallet);
+        excludeFromReward(_teamAddress);
         // unicrypt
         excludeFromReward(0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf);
 
@@ -1553,7 +1554,7 @@ contract RailrToken is Context, IERC20, Ownable {
     }
 
     function _transferToTreasury(uint256 rFee, uint256 tFee) private {
-        _rOwned[treasuryWallet] = _rOwned[treasuryWallet].add(rFee);
-        _tOwned[treasuryWallet] = _tOwned[treasuryWallet].add(tFee);
+        _rOwned[treasuryAddress] = _rOwned[treasuryAddress].add(rFee);
+        _tOwned[treasuryAddress] = _tOwned[treasuryAddress].add(tFee);
     }
 }
