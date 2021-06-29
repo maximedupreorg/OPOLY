@@ -901,7 +901,7 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
     string private _name = "Railroad Token";
-    string private _symbol = "RAILR5";
+    string private _symbol = "RAILR6";
     uint8 private _decimals = 9;
 
     uint256 public _taxFee = 10;
@@ -942,7 +942,7 @@ contract RailrToken is Context, IERC20, Ownable {
         treasuryWallet = _treasuryWallet;
         _rOwned[_msgSender()] = _rTotal;
         IUniswapV2Router02 _uniswapV2Router =
-            IUniswapV2Router02(0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F);
+            IUniswapV2Router02(0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D);
         uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
             .createPair(address(this), _uniswapV2Router.WETH());
         uniswapV2Router = _uniswapV2Router;
