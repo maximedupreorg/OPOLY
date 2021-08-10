@@ -901,7 +901,7 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
     string private _name = "Railroad Token";
-    string private _symbol = "RAILR10";
+    string private _symbol = "RAILR11";
     uint8 private _decimals = 9;
 
     uint256 public _taxFee = 10;
@@ -914,7 +914,7 @@ contract RailrToken is Context, IERC20, Ownable {
     address public immutable uniswapV2Pair;
 
     bool inSwapAndLiquify;
-    bool public swapAndLiquifyEnabled = false; // Disable by default
+    bool public swapAndLiquifyEnabled = false;
 
     uint256 public _maxTxAmount = 1000 * 10**6 * 10**9;
     uint256 private numTokensSellToAddToLiquidity = 1250 * 10**3 * 10**9;
@@ -938,7 +938,9 @@ contract RailrToken is Context, IERC20, Ownable {
         address _routerAddress,
         address _treasuryAddress,
         address _distributionAddress,
-        address _teamAddress
+        address _teamAddress,
+        address _firstOwner,
+        address _secondOwner
     ) public {
         _rOwned[_msgSender()] = _rTotal;
         IUniswapV2Router02 _uniswapV2Router =
@@ -959,7 +961,11 @@ contract RailrToken is Context, IERC20, Ownable {
         // team
         _isExcludedFromFee[_teamAddress] = true;
         // unicrypt
-        _isExcludedFromFee[0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf] = true;
+        _isExcludedFromFee[0xeaed594b5926a7d5fbbc61985390baaf936a6b8d] = true;
+        // first owner
+        _isExcludedFromFee[_firstOwner] = true;
+        // second owner
+        _isExcludedFromFee[_secondOwner] = true;
 
         // Exclude from rewards
         // contract
@@ -972,8 +978,10 @@ contract RailrToken is Context, IERC20, Ownable {
         excludeFromReward(_distributionAddress);
         // team
         excludeFromReward(_teamAddress);
-        // unicrypt
-        excludeFromReward(0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf);
+        // first owner
+        excludeFromReward(_firstOwner);
+        // second owner
+        excludeFromReward(_secondOwner);
 
         emit Transfer(address(0), _msgSender(), _tTotal);
     }

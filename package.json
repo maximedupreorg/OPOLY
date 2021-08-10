@@ -11,10 +11,12 @@
     "scripts": {
         "deploy:rinkeby": "dotenv -- truffle deploy --network ethRinkeby",
         "deploy:bscTestnet": "dotenv -- truffle deploy --network bscTestnet",
+        "deploy:bscMainnet": "dotenv -- truffle deploy --network bscMainnet",
         "start:rinkebyFork": "dotenv -- bash -c 'ganache-cli -f https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_API_KEY_RINKEBY}'",
         "start:bscMainnetFork": "ganache-cli -f https://bsc-dataseed1.binance.org",
         "test": "dotenv truffle test",
         "verify:rinkeby": "dotenv -- truffle run verify RailrToken --network ethRinkeby",
-        "verify:bscTestnet": "dotenv -- truffle run verify RailrToken --network bscTestnet"
+        "verify:bscTestnet": "dotenv -- truffle run verify RailrToken --network bscTestnet",
+        "verify:bscMainnet": "dotenv -- truffle run verify RailrToken --network bscMainnet"
     }
 }
