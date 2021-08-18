@@ -879,7 +879,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
     ) external;
 }
 
-contract RailrToken is Context, IERC20, Ownable {
+contract OpolyToken is Context, IERC20, Ownable {
     using SafeMath for uint256;
     using Address for address;
 
@@ -900,8 +900,8 @@ contract RailrToken is Context, IERC20, Ownable {
     uint256 private _tTotal = 1000 * 10**7 * 10**9;
     uint256 private _rTotal = (MAX - (MAX % _tTotal));
 
-    string private _name = "Railroad Token";
-    string private _symbol = "RAILR11";
+    string private _name = "opoly.game";
+    string private _symbol = "OPOLY";
     uint8 private _decimals = 9;
 
     uint256 public _taxFee = 10;
@@ -960,8 +960,6 @@ contract RailrToken is Context, IERC20, Ownable {
         _isExcludedFromFee[_distributionAddress] = true;
         // team
         _isExcludedFromFee[_teamAddress] = true;
-        // unicrypt
-        _isExcludedFromFee[0xeaed594b5926a7d5fbbc61985390baaf936a6b8d] = true;
         // first owner
         _isExcludedFromFee[_firstOwner] = true;
         // second owner

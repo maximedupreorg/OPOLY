@@ -1,26 +1,26 @@
-const RailrToken = artifacts.require("RailrToken");
+const OpolyToken = artifacts.require("OpolyToken");
 const IUniswapV2Router02 = artifacts.require("IUniswapV2Router02");
 const IUniswapV2Pair = artifacts.require("IUniswapV2Pair");
 
-contract("RailrToken", (accounts) => {
-    it("should have the symbol RAILR", async () => {
-        const instance = await RailrToken.deployed();
+contract("OPOLYToken", (accounts) => {
+    it("should have the symbol OPOLY", async () => {
+        const instance = await OpolyToken.deployed();
 
         const symbol = await instance.symbol();
 
-        assert.equal(symbol, "RAILR6", "token symbol");
+        assert.equal(symbol, "OPOLY", "token symbol");
     });
 
-    it("should have the Railroad Token name", async () => {
-        const instance = await RailrToken.deployed();
+    it("should have the opoly.game name", async () => {
+        const instance = await OpolyToken.deployed();
 
         const name = await instance.name();
 
-        assert.equal(name, "Railroad Token", "name");
+        assert.equal(name, "opoly.game", "name");
     });
 
     it("should have an initial total supply of 10B tokens", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const totalSupply = await instance.totalSupply();
 
@@ -32,7 +32,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should have an initial 10% liquidity fee", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const liquidityFee = await instance._liquidityFee();
 
@@ -40,7 +40,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should have an initial 10% tax fee", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const taxFee = await instance._taxFee();
 
@@ -48,7 +48,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the contract address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
             instance.address,
@@ -58,7 +58,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the owner (deployment) address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(accounts[0]);
 
@@ -66,7 +66,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the treasury address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
             process.env.TREASURY_ADDRESS,
@@ -76,7 +76,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the distribution address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
             process.env.DISTRIBUTION_ADDRESS,
@@ -86,7 +86,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the team address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
             process.env.TEAM_ADDRESS,
@@ -95,18 +95,8 @@ contract("RailrToken", (accounts) => {
         assert.equal(isExcludedFromFee, true);
     });
 
-    it("should exclude ETH unicrypt address from fee by default", async () => {
-        const instance = await RailrToken.deployed();
-
-        const isExcludedFromFee = await instance.isExcludedFromFee(
-            "0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf",
-        );
-
-        assert.equal(isExcludedFromFee, true);
-    });
-
     it("should exclude the contract address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromFee = await instance.isExcludedFromFee(
             instance.address,
@@ -116,7 +106,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the owner (deployment) address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
             accounts[0],
@@ -126,7 +116,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the treasury address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
             process.env.TREASURY_ADDRESS,
@@ -136,7 +126,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the distribution address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
             process.env.DISTRIBUTION_ADDRESS,
@@ -146,7 +136,7 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should exclude the team address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         const isExcludedFromReward = await instance.isExcludedFromReward(
             process.env.TEAM_ADDRESS,
@@ -155,20 +145,10 @@ contract("RailrToken", (accounts) => {
         assert.equal(isExcludedFromReward, true);
     });
 
-    it("should exclude ETH unicrypt address from rewards by default", async () => {
-        const instance = await RailrToken.deployed();
-
-        const isExcludedFromReward = await instance.isExcludedFromReward(
-            "0xDba68f07d1b7Ca219f78ae8582C213d975c25cAf",
-        );
-
-        assert.equal(isExcludedFromReward, true);
-    });
-
     it("should not be able to set a max transaction percentage equal to 0", async () => {
         let failed = false;
 
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         try {
             await instance.setMaxTxPercent(0);
@@ -182,7 +162,7 @@ contract("RailrToken", (accounts) => {
     it("should not be able to set a max transaction percentage to -1", async () => {
         let failed = false;
 
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         try {
             await instance.setMaxTxPercent(-1);
@@ -196,7 +176,7 @@ contract("RailrToken", (accounts) => {
     it("should not be able to set a tax fee greater than 10", async () => {
         let failed = false;
 
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         try {
             await instance.setTaxFeePercent(11);
@@ -210,7 +190,7 @@ contract("RailrToken", (accounts) => {
     it("should not be able to set a liquidity fee greater than 10", async () => {
         let failed = false;
 
-        const instance = await RailrToken.deployed();
+        const instance = await OpolyToken.deployed();
 
         try {
             await instance.setLiquidityFeePercent(11);
@@ -222,11 +202,13 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should transfer the fees to the treasury wallet on transfers between 2 holders", async () => {
-        const instance = await RailrToken.new(
+        const instance = await OpolyToken.new(
             process.env.ROUTER_ADDRESS,
             process.env.TREASURY_ADDRESS,
             process.env.DISTRIBUTION_ADDRESS,
             process.env.TEAM_ADDRESS,
+            process.env.FIRST_OWNER,
+            process.env.SECOND_OWNER,
         );
 
         await instance.transfer(accounts[1], getTokenAmount("1000000000"));
@@ -275,11 +257,13 @@ contract("RailrToken", (accounts) => {
         const WEI_TO_ADD_TO_LIQ = web3.utils.toWei("1");
         const LP_ACCOUNT = accounts[0];
 
-        const instance = await RailrToken.new(
+        const instance = await OpolyToken.new(
             process.env.ROUTER_ADDRESS,
             process.env.TREASURY_ADDRESS,
             process.env.DISTRIBUTION_ADDRESS,
             process.env.TEAM_ADDRESS,
+            process.env.FIRST_OWNER,
+            process.env.SECOND_OWNER,
         );
 
         const routerInstance = await IUniswapV2Router02.at(
@@ -310,7 +294,7 @@ contract("RailrToken", (accounts) => {
 
         if ((await pairInstance.token0()) === instance.address) {
             // console.log(
-            //     "Pair reserve of token0/RAILR",
+            //     "Pair reserve of token0/OPOLY",
             //     reserves.reserve0.toString(),
             // );
             // console.log(
@@ -331,7 +315,7 @@ contract("RailrToken", (accounts) => {
             );
         } else {
             // console.log(
-            //     "Pair reserve of token1/RAILR",
+            //     "Pair reserve of token1/OPOLY",
             //     reserves.reserve1.toString(),
             // );
             // console.log(
@@ -354,11 +338,13 @@ contract("RailrToken", (accounts) => {
     });
 
     it("should be able to do a reflective airdrop to all non excluded wallets", async () => {
-        const instance = await RailrToken.new(
+        const instance = await OpolyToken.new(
             process.env.ROUTER_ADDRESS,
             process.env.TREASURY_ADDRESS,
             process.env.DISTRIBUTION_ADDRESS,
             process.env.TEAM_ADDRESS,
+            process.env.FIRST_OWNER,
+            process.env.SECOND_OWNER,
         );
 
         await instance.transfer(accounts[1], getTokenAmount(4000000000));

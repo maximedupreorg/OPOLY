@@ -1,8 +1,8 @@
-const RailrToken = artifacts.require("RailrToken");
+const OpolyToken = artifacts.require("OpolyToken");
 
 module.exports = function (deployer) {
     deployer.deploy(
-        RailrToken,
+        OpolyToken,
         process.env.ROUTER_ADDRESS,
         process.env.TREASURY_ADDRESS,
         process.env.DISTRIBUTION_ADDRESS,
